@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 
 {% block section %}
-    <section class="login-page">
+    <section id="login" class="login-page">
+      {% if login_error %}
+        <p>{{login_error}}</p>
+      {% endif %}
       <h2>Zaloguj się</h2>
-      <form>
+      <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
         <div class="form-group">
           <input type="email" name="email" placeholder="Email" />
         </div>
