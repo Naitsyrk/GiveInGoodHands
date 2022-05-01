@@ -10,7 +10,6 @@ from django.contrib.auth import login, authenticate, logout
 class LandingPageView(View):
     def get(self, request):
         logged_user = request.user
-
         donations = Donation.objects.all()
         donated_bags_num = 0
         for donation in donations:
@@ -30,11 +29,11 @@ class LandingPageView(View):
             "foundations": foundations,
             "non_governmental_organization": non_governmental_organization,
             "local_collection": local_collection,
-
-
         }
         if logged_user.is_authenticated:
             ctx['logged_user'] = logged_user
+        if logged_user.is_superuser:
+            ctx["superuser"] = logged_user
         return render(
             request,
             'index.html',
