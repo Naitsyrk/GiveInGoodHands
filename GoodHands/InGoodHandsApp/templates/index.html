@@ -53,8 +53,10 @@
           <p>kurier przyjedzie w dogodnym terminie</p>
         </div>
       </div>
-
-      <a href="{% url 'sign_up' %}#sign-up" class="btn btn--large">Załóż konto</a>
+      {% if logged_user %}
+      {% else %}
+        <a href="{% url 'sign_up' %}#sign-up" class="btn btn--large">Załóż konto</a>
+      {% endif %}
     </section>
 
     <section id="about-us" class="about-us">

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 # Create your views here.
-from .models import Donation, Institution
+from .models import Donation, Institution, Category
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 
@@ -45,7 +45,14 @@ class AddDonationView(View):
     def get(self, request):
         logged_user = request.user
         if logged_user.is_authenticated:
-            return render(request, 'form.html', {"logged_user": logged_user})
+            categories = Category.objects.all()
+            ctx = {
+                "logged_user": logged_user,
+                "categories": categories
+            }
+            if logged_user.is_superuser:
+                ctx["superuser"] = logged_user
+            return render(request, 'form.html', ctx)
         else:
             return redirect('/login/#login')
 
@@ -72,6 +79,8 @@ class RegisterView(View):
         ctx = {}
         if logged_user.is_authenticated:
             ctx['logged_user'] = logged_user
+            if logged_user.is_superuser:
+                ctx["superuser"] = logged_user
         return render(request, 'register.html', ctx)
 
     def post(self, request):
@@ -88,3 +97,16 @@ class Logout(View):
     def get(self, request):
         logout(request)
         return redirect("/")
+
+
+class UserDetails(View):
+    def get(self, request):
+        logged_user = request.user
+        ctx = {}
+        if logged_user.is_authenticated:
+            ctx['logged_user'] = logged_user
+            if logged_user.is_superuser:
+                ctx["superuser"] = logged_user
+            return render(request, 'profil.html', ctx)
+        else:
+            return redirect('/login/#login')
