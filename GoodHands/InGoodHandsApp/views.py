@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 # Create your views here.
-from .models import Donation
+from .models import Donation, Institution
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 
@@ -21,9 +21,17 @@ class LandingPageView(View):
                 pass
             else:
                 donated_institutions.append(donation.institution)
+        foundations = Institution.objects.filter(type="FA")
+        non_governmental_organization = Institution.objects.filter(type="OP")
+        local_collection = Institution.objects.filter(type="ZL")
         ctx = {
-                'donated_bags_num': donated_bags_num,
-                "donated_institutions_num": len(donated_institutions)
+            'donated_bags_num': donated_bags_num,
+            "donated_institutions_num": len(donated_institutions),
+            "foundations": foundations,
+            "non_governmental_organization": non_governmental_organization,
+            "local_collection": local_collection,
+
+
         }
         if logged_user.is_authenticated:
             ctx['logged_user'] = logged_user
