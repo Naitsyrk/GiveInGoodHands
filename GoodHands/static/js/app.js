@@ -268,8 +268,76 @@ document.addEventListener("DOMContentLoaded", function() {
             else {
                 category.style.display="none"
             }
+        })
+        })
+  })
+  const finalFormButton = document.querySelector('.to-final-step')
+  finalFormButton.addEventListener('click', function(e) {
+    const bagsInput = document.querySelector("input[name=bags]")
+    const bagsOutput = document.querySelector('.summary-bags')
+    const categoriesInput = document.querySelectorAll('input[name=categories]')
+    let categoriesOutput = ''
+    categoriesInput.forEach(function(categoryInput) {
+    if (categoryInput.checked == 1) {
+    categoriesOutput += `${categoryInput.nextElementSibling.nextElementSibling.innerText}, `
+    }
+    })
+    categoriesOutput = categoriesOutput.slice(0, -2)
+    bagsOutput.innerText = `Liczba worków: ${bagsInput.value}  Kategorie: (${categoriesOutput})`
+    const institutionsName = document.querySelectorAll("input[name=organization]")
+    let institutionName = ''
+    institutionsName.forEach(function(institution) {
+    if (institution.checked == 1) {
+        institutionName = institution.value
+    }
+    })
+    const institutionOutput = document.querySelector('.summary-institution')
+    institutionOutput.innerText = ` Odbiorca: "${institutionName}"`
 
-            console.log(categoryId)
-        })
-        })
-  })});
+    const summaryAddressOutput = document.querySelector('.summary-address')
+    const oldAddressUl = summaryAddressOutput.lastChild
+    summaryAddressOutput.removeChild(oldAddressUl)
+    let street = document.querySelector("input[name=address]")
+    let city = document.querySelector("input[name=city]")
+    let postCode = document.querySelector("input[name=postcode]")
+    let phone = document.querySelector("input[name=phone]")
+    const ulAddress = document.createElement('ul')
+    liStreet = document.createElement('li')
+    liStreet.innerText = street.value
+    liCity = document.createElement('li')
+    liCity.innerText = city.value
+    liPostCode = document.createElement('li')
+    liPostCode.innerText = postCode.value
+    liPhone = document.createElement('li')
+    liPhone.innerText = phone.value
+    ulAddress.appendChild(liStreet)
+    ulAddress.appendChild(liCity)
+    ulAddress.appendChild(liPostCode)
+    ulAddress.appendChild(liPhone)
+    summaryAddressOutput.appendChild(ulAddress)
+
+    const dateOutput = document.querySelector('.summary-date')
+    const oldDateUl = dateOutput.lastChild
+    dateOutput.removeChild(oldDateUl)
+    let date = document.querySelector("input[name=data]")
+    let time = document.querySelector("input[name=time]")
+    let comment = document.querySelector("textarea[name=more_info]")
+    if (comment.value == null || comment.value == "") {
+        commentValue = "Brak uwag"
+    }
+    else {
+        commentValue = comment.value
+    }
+    const ulDate = document.createElement('ul')
+    liDate = document.createElement('li')
+    liDate.innerText = date.value
+    liTime = document.createElement('li')
+    liTime.innerText = time.value
+    liComment = document.createElement('li')
+    liComment.innerText = commentValue
+    ulDate.appendChild(liDate)
+    ulDate.appendChild(liTime)
+    ulDate.appendChild(liComment)
+    dateOutput.appendChild(ulDate)
+  })
+  });
