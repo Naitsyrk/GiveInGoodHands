@@ -248,8 +248,28 @@ document.addEventListener("DOMContentLoaded", function() {
       this.updateForm();
     }
   }
+  const divs = document.querySelectorAll('.step3')
+  divs.forEach(function(e) {
+    e.style.display = 'none'
+  })
   const form = document.querySelector(".form--steps");
   if (form !== null) {
     new FormSteps(form);
   }
-});
+  const checkboxes = document.querySelectorAll("input[name=categories]");
+  checkboxes.forEach(function(element) {
+      element.addEventListener('change', function(e) {
+        categoryId = `.cat${this.value}`
+        const categories = document.querySelectorAll(categoryId)
+        categories.forEach(function(category) {
+            if (category.style.display === "none") {
+                category.style.display="inline"
+            }
+            else {
+                category.style.display="none"
+            }
+
+            console.log(categoryId)
+        })
+        })
+  })});

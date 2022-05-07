@@ -46,9 +46,11 @@ class AddDonationView(View):
         logged_user = request.user
         if logged_user.is_authenticated:
             categories = Category.objects.all()
+            institutions = Institution.objects.all()
             ctx = {
                 "logged_user": logged_user,
-                "categories": categories
+                "categories": categories,
+                "institutions": institutions
             }
             if logged_user.is_superuser:
                 ctx["superuser"] = logged_user
