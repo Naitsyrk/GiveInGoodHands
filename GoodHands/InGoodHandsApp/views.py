@@ -58,6 +58,44 @@ class AddDonationView(View):
         else:
             return redirect('/login/#login')
 
+    def post(self, request):
+        logged_user = request.user
+        categories = request.POST.get('categories')
+        bags = request.POST.get('bags')
+        organization = request.POST.get('organization')
+        address = request.POST.get('address')
+        city = request.POST.get('city')
+        postcode = request.POST.get('postcode')
+        phone = request.POST.get('phone')
+        date = request.POST.get('data')
+        time = request.POST.get('time')
+        comment = request.POST.get('more_info')
+        new_donation = Donation(quantity=bags,
+                                address=address,
+                                phone_number=phone,
+                                city=city,
+                                institution=Institution.objects.get(name=organization),
+                                zip_code=postcode,
+                                pick_up_date=date,
+                                pick_up_time=time,
+                                pick_up_comment=comment,
+                                user=logged_user)
+        new_donation.save()
+        for category in categories:
+            new_donation.categories.add(Category.objects.get(id=category))
+        return redirect("donation_confirmation")
+
+
+class ConfirmationDonation(View):
+    def get(self, request):
+        logged_user = request.user
+        ctx = {
+            "logged_user": logged_user,
+        }
+        if logged_user.is_superuser:
+            ctx["superuser"] = logged_user
+        return render(request, "form-confirmation.html", ctx)
+
 
 class LoginView(View):
     def get(self, request):
@@ -107,6 +145,8 @@ class UserDetails(View):
         ctx = {}
         if logged_user.is_authenticated:
             ctx['logged_user'] = logged_user
+            user_donations = Donation.objects.filter(user=logged_user)
+            ctx['donations'] = user_donations
             if logged_user.is_superuser:
                 ctx["superuser"] = logged_user
             return render(request, 'profil.html', ctx)

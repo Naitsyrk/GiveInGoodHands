@@ -13,4 +13,16 @@
           <h3>E-mail: {{logged_user.email}}</h3>
         </div>
     </section>
+    <section class="login-page">
+        <h2>Przekazane dary:</h2>
+            {% if donations %}
+                <ul>
+                    {% for donation in donations %}
+                        <li class="form-group">Liczba przekazanych worków: {{donation.quantity}}. Kategorie darowizny: {% for category in donation.categories.all %}{{category.name}}{% endfor %}. Odbiorca: {{donation.institution.name}}. Data przekazania: {{donation.pick_up_date}}. Godzina przekazania: {{donation.pick_up_time}}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Nie przekazano jeszcze żadnych darów</p>
+            {% endif %}
+    </section>
 {% endblock %}

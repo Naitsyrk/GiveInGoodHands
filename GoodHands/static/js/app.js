@@ -243,7 +243,6 @@ document.addEventListener("DOMContentLoaded", function() {
      * TODO: validation, send data to server
      */
     submit(e) {
-      e.preventDefault();
       this.currentStep++;
       this.updateForm();
     }
